@@ -11,7 +11,7 @@ const Form = (props) => {
 
     const mBuffOptions = [];
     const formatPercent = (lv) => {
-        const numStr = lv * 3 + '';
+        const numStr = (lv < 4 ? '0' : '') + (lv * 3);
         return `${numStr.substring(0, numStr.length - 1)}.${numStr.substring(numStr.length - 1)}%`;
     };
     for(let lv = 0; lv <= 100; lv++) {
@@ -78,20 +78,16 @@ const Form = (props) => {
         </form>
         <div class="row">
             <div class="col-sm-6 input-group fluid">
-                <input
-                    type="button"
+                <button
                     class={selectedTab === 'calc' ? 'primary' : ''}
-                    value="計算機"
                     onClick={() => setSelectedTab('calc')}
-                />
+                >計算機</button>
             </div>
             <div class="col-sm-6 input-group fluid">
-                <input
-                    type="button"
+                <button
                     class={selectedTab === 'history' ? 'primary' : ''}
-                    value="計算結果履歴"
                     onClick={() => setSelectedTab('history')}
-                />
+                >計算結果履歴</button>
             </div>
         </div>
         {selectedTab === 'calc' && <form>
@@ -124,7 +120,7 @@ const Form = (props) => {
             </div>
             <div class="row">
                 <div class="col-sm-12 input-group fluid">
-                    <input type="button" class="tertiary" value="予測ドロップ数を計算"  onClick={calc} />
+                    <button class="tertiary"  onClick={calc}>予測ドロップ数を計算</button>
                 </div>
             </div>
         </form>}

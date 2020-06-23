@@ -44,11 +44,11 @@ const Main = () => {
         });
     }, []);
 
-    return <div class="container">
+    return <React.Fragment>
         {error !== '' && <Error message={error} />}
         {loading && <Loading />}
         {!loading && data && <Form data={data} />}
-    </div>
+    </React.Fragment>
 };
 
 export default Main;

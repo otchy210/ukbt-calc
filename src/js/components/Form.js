@@ -24,7 +24,7 @@ const Form = (props) => {
     const {a, b, cells} = data;
     const cellOptions = [];
     const cellsMap = {unselected: {lv: '', cont: '', area: ''}};
-    cells.sort((l, r) => {
+    cells.filter(cell => cell.type === 'Y').sort((l, r) => {
         if (l.x !== r.x) {
             return l.x - r.x;
         }
@@ -76,7 +76,7 @@ const Form = (props) => {
                 </div>
             </div>
         </form>
-        <div class="row">
+        <div class="row tab">
             <div class="col-sm-6 input-group fluid">
                 <button
                     class={selectedTab === 'calc' ? 'primary' : ''}

@@ -19,6 +19,25 @@
         font-size: 0.6em;
         text-align: right;
       }
+      .input-group.fluid {
+        align-items: stretch;
+        flex-direction: column;
+      }
+      .row.tab > .input-group.fluid {
+        padding: 0;
+      }
+      .row.tab > .input-group.fluid > button {
+        margin-bottom: 0;
+      }
+      .row.tab > .input-group.fluid:first-child > button {
+        margin-right: 0;
+      }
+      .row.tab > .input-group.fluid:last-child > button {
+        margin-left: 0;
+      }
+      .row.tab + form {
+        margin-top: 0;
+      }
     </style>
   </head>
   <body>

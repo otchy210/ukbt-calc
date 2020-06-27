@@ -20,8 +20,8 @@ const formatDate = (ts) => {
 }
 
 const ResultCard = (props) => {
-    const {dBuff, mBuff, result} = props;
-    const factor = (dBuff ? 1.5 : 1.0) + (mBuff * 3 / 1000);
+    const {buffs, result} = props;
+    const factor = (buffs.d ? 1.5 : 1.0) + (buffs.m * 3 / 1000);
     const lap = formatNum(result.lap);
     const num = formatNum(result.base * factor);
     const ts = formatDate(result.ts);

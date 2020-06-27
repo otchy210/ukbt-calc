@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ResultCard from './ResultCard';
+import { setLocal, getLocal } from '../common';
 
 const Form = (props) => {
-    const [dBuff, setDBuff] = useState(false);
-    const [mBuff, setMBuff] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [buffs, setBuffs] = useState({d: undefined, m: 0});
+    const setDBuff = (dBuff) => {
+        const updatedBuffs = {...buffs, d: dBuff};
+        setLocal('buffs', updatedBuffs);
+        setBuffs(updatedBuffs);
+    };
+    const setMBuff = (mBuff) => {
+        const updatedBuffs = {...buffs, m: mBuff};
+        setLocal('buffs', updatedBuffs);
+        setBuffs(updatedBuffs);
+    };
     const [selectedTab, setSelectedTab] = useState('calc');
     const [selectedCell, setSelectedCell] = useState('unselected');
     const [lap, setLap] = useState(undefined);
@@ -17,8 +28,19 @@ const Form = (props) => {
     for(let lv = 0; lv <= 100; lv++) {
         const percent = formatPercent(lv);
         const label = lv === 0 ? '----' : `Lv.${lv} [${percent}]`;
-        mBuffOptions.push(<option value={lv} selected={lv === mBuff}>{label}</option>);
+        mBuffOptions.push(<option value={lv} selected={lv === buffs.m}>{label}</option>);
     }
+
+    useEffect(() => {
+        const savedBuffs = getLocal('buffs');
+        if (savedBuffs) {
+            setBuffs(savedBuffs);
+        } else {
+            setDBuff(false);
+            setMBuff(0);
+        }
+        setLoading(false);
+    }, []);
 
     const {data} = props;
     const {a, b, cells} = data;
@@ -64,13 +86,13 @@ const Form = (props) => {
                 <div class="col-sm-12 col-md-6 input-group fluid">
                     <label for="d-buff">デイリーバフ (x1.5)</label>
                     <span class="nowrap">
-                        <label><input type="radio" name="d-buff" value="false" checked={dBuff === false} onClick={() => setDBuff(false)} />なし</label>
-                        <label><input type="radio" name="d-buff" value="true" checked={dBuff === true} onClick={() => setDBuff(true)} />あり</label>
+                        <label><input type="radio" name="d-buff" value="false" checked={buffs.d === false} onClick={() => setDBuff(false)} disabled={loading} />なし</label>
+                        <label><input type="radio" name="d-buff" value="true" checked={buffs.d === true} onClick={() => setDBuff(true)} disabled={loading} />あり</label>
                     </span>
                 </div>
                 <div class="col-sm-12 col-md-6 input-group fluid">
                     <label for="m-buff">ミミッキバフ</label>
-                    <select id="m-buff" onChange={(e) => setMBuff(parseInt(e.target.value))}>
+                    <select id="m-buff" onChange={(e) => setMBuff(parseInt(e.target.value))} disabled={loading}>
                         {mBuffOptions}
                     </select>
                 </div>
@@ -81,12 +103,14 @@ const Form = (props) => {
                 <button
                     class={selectedTab === 'calc' ? 'primary' : ''}
                     onClick={() => setSelectedTab('calc')}
+                    disabled={loading}
                 >計算機</button>
             </div>
             <div class="col-sm-6 input-group fluid">
                 <button
                     class={selectedTab === 'history' ? 'primary' : ''}
                     onClick={() => setSelectedTab('history')}
+                    disabled={loading}
                 >計算結果履歴</button>
             </div>
         </div>
@@ -94,39 +118,39 @@ const Form = (props) => {
             <div class="row">
                 <div class="col-sm-12 col-md-4 input-group fluid">
                     <label for="cell">放置マス</label>
-                    <select id="cell" onChange={selectCell}>
+                    <select id="cell" onChange={selectCell} disabled={loading}>
                         <option value="unselected">選択して下さい</option>
                         {cellOptions}
                     </select>
                 </div>
                 <div class="col-sm-12 col-md-4 input-group fluid">
                     <label for="lap">ラップ</label>
-                    <input type="number" id="lap" value={lap} step="0.01" min="0" max="60" onChange={changeLap} placeholder="ラップタイムを入力" />
+                    <input type="number" id="lap" value={lap} step="0.01" min="0" max="60" onChange={changeLap} disabled={loading} placeholder="ラップタイムを入力" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12 col-md-4 input-group fluid">
                     <label for="lv">敵 Lv</label>
-                    <input id="lv" value={cellsMap[selectedCell].lv} readOnly={true} />
+                    <input id="lv" value={cellsMap[selectedCell].lv} disabled={true} />
                 </div>
                 <div class="col-sm-12 col-md-4 input-group fluid">
                     <label for="cont">大陸</label>
-                    <input id="cont" value={cellsMap[selectedCell].cont} readOnly={true} />
+                    <input id="cont" value={cellsMap[selectedCell].cont} disabled={true} />
                 </div>
                 <div class="col-sm-12 col-md-4 input-group fluid">
                     <label for="area">地域</label>
-                    <input id="area" value={cellsMap[selectedCell].area} readOnly={true} />
+                    <input id="area" value={cellsMap[selectedCell].area} disabled={true} />
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12 input-group fluid">
-                    <button class="tertiary"  onClick={calc}>予測ドロップ数を計算</button>
+                    <button class="tertiary" onClick={calc} disabled={loading}>予測ドロップ数を計算</button>
                 </div>
             </div>
         </form>}
         {selectedTab === 'calc' && latestResult && <div class="row">
             <div class="col-sm-12 col-md-4">
-                <ResultCard dBuff={dBuff} mBuff={mBuff} result={latestResult} />
+                <ResultCard buffs={buffs} result={latestResult} />
             </div>
         </div>}
         {selectedTab === 'history' && <div class="row">

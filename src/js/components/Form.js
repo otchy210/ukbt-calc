@@ -4,6 +4,11 @@ import { setLocal, getLocal } from '../common';
 
 const Form = (props) => {
     const [loading, setLoading] = useState(true);
+    const [mode, setModeOrg] = useState(undefined);
+    const setMode = (mode) => {
+        setLocal('mode', mode);
+        setModeOrg(mode);
+    };
     const [buffs, setBuffs] = useState({d: undefined, m: 0});
     const setDBuff = (dBuff) => {
         const updatedBuffs = {...buffs, d: dBuff};
@@ -39,6 +44,8 @@ const Form = (props) => {
             setDBuff(false);
             setMBuff(0);
         }
+        const mode = getLocal('mode') || 'K'
+        setMode(mode);
         setLoading(false);
     }, []);
 
@@ -83,14 +90,23 @@ const Form = (props) => {
     <div class="container">
         <form>
             <div class="row">
-                <div class="col-sm-12 col-md-6 input-group fluid">
+                <div class="col-sm-12 col-md-4 input-group fluid">
+                    <label for="type">モード</label>
+                    <select id="type" value={mode} onChange={(e) => setMode(e.target.value)} disabled={loading}>
+                        <option value="Y">強化書</option>
+                        <option value="R">血石</option>
+                        <option value="B">魔法石</option>
+                        <option value="P">報告</option>
+                    </select>
+                </div>
+                <div class="col-sm-12 col-md-4 input-group fluid">
                     <label for="d-buff">デイリーバフ (x1.5)</label>
                     <span class="nowrap">
                         <label><input type="radio" name="d-buff" value="false" checked={buffs.d === false} onClick={() => setDBuff(false)} disabled={loading} />なし</label>
                         <label><input type="radio" name="d-buff" value="true" checked={buffs.d === true} onClick={() => setDBuff(true)} disabled={loading} />あり</label>
                     </span>
                 </div>
-                <div class="col-sm-12 col-md-6 input-group fluid">
+                <div class="col-sm-12 col-md-4 input-group fluid">
                     <label for="m-buff">ミミッキバフ</label>
                     <select id="m-buff" onChange={(e) => setMBuff(parseInt(e.target.value))} disabled={loading}>
                         {mBuffOptions}

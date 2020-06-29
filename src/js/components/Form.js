@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import Calculator from './Calculator';
+import Post from './Post';
 import { setLocal, getLocal } from '../common';
 
 const Form = (props) => {
+    const {data, api} = props;
+
     const [loading, setLoading] = useState(true);
     const [mode, setModeOrg] = useState(undefined);
     const setMode = (mode) => {
@@ -46,7 +49,7 @@ const Form = (props) => {
         setLoading(false);
     }, []);
 
-    return <React.Fragment>
+    return <>
     <div class="container">
         <form>
             <div class="row">
@@ -74,7 +77,7 @@ const Form = (props) => {
                 </div>
             </div>
         </form>
-        {mode !== 'P' && mode === 'Y' && <Calculator loading={loading} type={mode} buffs={buffs} data={props.data} />}
+        {mode !== 'P' && mode === 'Y' && <Calculator loading={loading} type={mode} buffs={buffs} data={data} />}
         {mode !== 'P' && mode !== 'Y' && <div class="row">
             <div class="col-sm-12">
                 <div class="card fluid">
@@ -82,15 +85,9 @@ const Form = (props) => {
                 </div>
             </div>
         </div>}
-        {mode === 'P' && <div class="row">
-            <div class="col-sm-12">
-                <div class="card fluid">
-                    ここから報告できるようにします。
-                </div>
-            </div>
-        </div>}
+        {mode === 'P' && <Post loading={loading} buffs={buffs} data={data} api={api} />}
     </div>
-    </React.Fragment>
+    </>
 };
 
 export default Form;

@@ -4,6 +4,7 @@ import Loading from './Loading';
 import Form from './Form';
 
 const Main = () => {
+    const [api, setApi] = useState();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [data, setData] = useState(undefined);
@@ -31,8 +32,9 @@ const Main = () => {
             setError('パラメータ key がセットされていません。');
             return;
         }
-        const url = `https://script.google.com/macros/s/${key}/exec`;
-        fetch(url).then((res) => {
+        const api = `https://script.google.com/macros/s/${key}/exec`;
+        setApi(api);
+        fetch(api).then((res) => {
             res.json().then(data => {
                 setLoading(false);
                 setData(data);
@@ -47,7 +49,7 @@ const Main = () => {
     return <React.Fragment>
         {error !== '' && <Error message={error} />}
         {loading && <Loading />}
-        {!loading && data && <Form data={data} />}
+        {!loading && data && <Form data={data} api={api} />}
     </React.Fragment>
 };
 

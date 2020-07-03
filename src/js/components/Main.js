@@ -32,7 +32,7 @@ const Main = () => {
             setError('パラメータ key がセットされていません。');
             return;
         }
-        const api = `https://script.google.com/macros/s/${key}/exec`;
+        const api = `https://script.google.com/macros/s/${key}/exec?v=2`;
         setApi(api);
         fetch(api).then((res) => {
             res.json().then(data => {

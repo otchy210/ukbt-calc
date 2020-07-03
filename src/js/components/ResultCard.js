@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 const formatNum = (num) => {
     const numStr = Math.round(num * 100) + '';
@@ -20,14 +21,16 @@ const formatDate = (ts) => {
 }
 
 const ResultCard = (props) => {
-    const {buffs, result} = props;
+    const {buffs, result, highlight} = props;
     const factor = (buffs.d ? 1.5 : 1.0) + (buffs.m * 3 / 1000);
     const lap = formatNum(result.lap);
     const num = formatNum(result.base * factor);
     const ts = formatDate(result.ts);
-    return <div class="card fluid result">
-        <h3>[{result.key}] {num} 個/h <span class="smaller-font">Lv.{result.lv} - {lap} 秒</span></h3>
-        <div class="ts">{ts}</div>
+    return <div class="col-sm-12 col-md-6 col-lg-3">
+        <div class={classNames('card', 'fluid', 'result', {'highlight': highlight})}>
+            <h3>[{result.key}] {num} 個/h <span class="smaller-font">Lv.{result.lv} - {lap} 秒</span></h3>
+            <div class="ts">{ts}</div>
+        </div>
     </div>;
 };
 

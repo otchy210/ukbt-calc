@@ -7,9 +7,10 @@ const Calculator = (props) => {
     const [selectedTab, setSelectedTab] = useState('calc');
     const [selectedCell, setSelectedCell] = useState('unselected');
     const [lap, setLap] = useState(undefined);
-    const [latestResult, setLatestResult] = useState(undefined);
+    const [results, setResults] = useState([]);
 
-    const {a, b, cells} = data;
+    const {values, cells} = data;
+    const {a, b} = values[type];
     const cellOptions = [];
     const cellsMap = {unselected: {lv: '', cont: '', area: ''}};
     cells.filter(cell => cell.type === type).sort((l, r) => {
@@ -42,7 +43,12 @@ const Calculator = (props) => {
         const enemies = 60 * 60 / lap * 5;
         const base = dropRate * enemies;
         const result = {...cell, lap, base, ts: (new Date()).getTime()};
-        setLatestResult(result);
+        const updatedResults = [...results];
+        updatedResults.unshift(result);
+        if (updatedResults.length > 4) {
+            updatedResults.pop();
+        }
+        setResults(updatedResults);
     };
 
     return <React.Fragment>
@@ -95,12 +101,10 @@ const Calculator = (props) => {
                 <button class="tertiary" onClick={calc} disabled={loading}>予測ドロップ数を計算</button>
             </div>
         </div>
+        {results.length > 0 && <div class="row">
+            {results.map((result, index) => <ResultCard buffs={buffs} result={result} highlight={index === 0} />)}
+        </div>}
     </form>}
-    {selectedTab === 'calc' && latestResult && <div class="row">
-        <div class="col-sm-12 col-md-4">
-            <ResultCard buffs={buffs} result={latestResult} />
-        </div>
-    </div>}
     {selectedTab === 'history' && <div class="row">
         <div class="col-sm-12">
             ごめんまだです！過去の計算結果の履歴が見れて、結果を比較できる…ようになる予定。乞うご期待！

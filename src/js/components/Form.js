@@ -57,8 +57,8 @@ const Form = (props) => {
                     <label for="type">モード</label>
                     <select id="type" class={classNames('mode', mode)} value={mode} onChange={(e) => setMode(e.target.value)} disabled={loading}>
                         <option value="Y">強化書</option>
-                        <option value="R">血石</option>
-                        <option value="B">魔法石</option>
+                        <option value="R">血石 (暫定)</option>
+                        <option value="B">魔法石 (未)</option>
                         <option value="P">報告</option>
                     </select>
                 </div>
@@ -77,8 +77,8 @@ const Form = (props) => {
                 </div>
             </div>
         </form>
-        {mode !== 'P' && mode === 'Y' && <Calculator loading={loading} type={mode} buffs={buffs} data={data} />}
-        {mode !== 'P' && mode !== 'Y' && <div class="row">
+        {(mode === 'Y' || mode === 'R') && <Calculator loading={loading} type={mode} buffs={buffs} data={data} />}
+        {mode === 'B' && <div class="row">
             <div class="col-sm-12">
                 <div class="card fluid">
                     データ不足でまだ使えません＞＜

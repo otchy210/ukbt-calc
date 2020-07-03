@@ -17,7 +17,7 @@ const formatDate = (ts) => {
     const hour = d.getHours();
     const min = d.getMinutes();
     const sec = d.getSeconds();
-    return `${year}-${month}-${date} ${padLeft(hour)}:${padLeft(min)}:${padLeft(sec)}`;
+    return `${year}-${padLeft(month)}-${padLeft(date)} ${padLeft(hour)}:${padLeft(min)}:${padLeft(sec)}`;
 }
 
 const ResultCard = (props) => {

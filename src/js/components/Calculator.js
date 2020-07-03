@@ -40,8 +40,8 @@ const Calculator = (props) => {
         const cell = cellsMap[selectedCell];
         const {lv} = cell;
         const dropRate = a * lv + b;
-        const enemies = 60 * 60 / lap * 5;
-        const base = dropRate * enemies;
+        const turns = (60 * 60 / (lap * 10 + 5 ) ) * 10;
+        const base = dropRate * turns;
         const result = {...cell, lap, base, ts: (new Date()).getTime()};
         const updatedResults = [...results];
         updatedResults.unshift(result);

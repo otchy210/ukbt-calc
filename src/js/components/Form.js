@@ -24,6 +24,7 @@ const Form = (props) => {
         setLocal('buffs', updatedBuffs);
         setBuffs(updatedBuffs);
     };
+    const [selectedTab, setSelectedTab] = useState('calc');
 
     const mBuffOptions = [];
     const formatPercent = (lv) => {
@@ -77,7 +78,7 @@ const Form = (props) => {
                 </div>
             </div>
         </form>
-        {(mode === 'Y' || mode === 'R') && <Calculator loading={loading} type={mode} buffs={buffs} data={data} />}
+        {(mode === 'Y' || mode === 'R') && <Calculator loading={loading} type={mode} buffs={buffs} data={data} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
         {mode === 'B' && <div class="row">
             <div class="col-sm-12">
                 <div class="card fluid">

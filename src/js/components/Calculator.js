@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ResultCard from './ResultCard';
+import { getHistoryManager } from '../HistoryManager';
 
 const Calculator = (props) => {
-    const {loading, type, buffs, data} = props;
+    const {loading, type, buffs, data, selectedTab, setSelectedTab} = props;
 
-    const [selectedTab, setSelectedTab] = useState('calc');
     const [selectedCell, setSelectedCell] = useState('unselected');
     const [lap, setLap] = useState(undefined);
     const [results, setResults] = useState([]);
+    const [history, setHistory] = useState([]);
 
     const {values, cells} = data;
     const {a, b} = values[type];
@@ -22,6 +23,11 @@ const Calculator = (props) => {
         cellsMap[cell.key] = cell;
         cellOptions.push(<option value={cell.key}>{cell.key}</option>);
     });
+
+    const historyManager = getHistoryManager(type);
+    useEffect(() => {
+        setHistory(historyManager.get());
+    }, [type]);
 
     const selectCell = (e) => {
         setSelectedCell(e.target.value);
@@ -45,10 +51,11 @@ const Calculator = (props) => {
         const result = {...cell, lap, base, ts: (new Date()).getTime()};
         const updatedResults = [...results];
         updatedResults.unshift(result);
-        if (updatedResults.length > 4) {
+        if (updatedResults.length > 3) {
             updatedResults.pop();
         }
         setResults(updatedResults);
+        setHistory(historyManager.add(result));
     };
 
     return <React.Fragment>
@@ -105,11 +112,16 @@ const Calculator = (props) => {
             {results.map((result, index) => <ResultCard buffs={buffs} result={result} highlight={index === 0} />)}
         </div>}
     </form>}
-    {selectedTab === 'history' && <div class="row">
-        <div class="col-sm-12">
-            ごめんまだです！過去の計算結果の履歴が見れて、結果を比較できる…ようになる予定。乞うご期待！
+    {selectedTab === 'history' && <form>
+        <div class="row">
+            <div class="col-sm-12 ">
+                24 を超えた履歴は古いものから自動的に削除されます。削除したくないものについてはお気に入りにしておいて下さい。
+            </div>
         </div>
-    </div>}
+        <div class="row">
+            {history.map((result) => <ResultCard buffs={buffs} result={result} showRank={true} showPin={true} />)}
+        </div>
+    </form>}
     </React.Fragment>
 }
 

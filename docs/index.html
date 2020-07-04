@@ -8,17 +8,6 @@
       label, .nowrap {
         white-space: nowrap;
       }
-      .smaller-font {
-        font-size: 0.6em;
-      }
-      .card.result.highlight {
-        background-color: #ffc;
-      }
-      .card.result > .ts {
-        margin: 0 12px 8px 12px;
-        font-size: 0.6em;
-        text-align: right;
-      }
       .input-group.fluid {
         align-items: stretch;
         flex-direction: column;
@@ -46,6 +35,46 @@
       }
       .mode.b {
         background-color: #ccf;
+      }
+      .card.result.highlight {
+        background-color: #ffc;
+      }
+      .card.result > .header {
+        display: flex;
+      }
+      .card.result > .header > h3:first-child {
+        flex-grow: 1;
+      }
+      .card.result > .header > h3:last-child {
+        cursor: pointer;
+      }
+      .card.result > .ts {
+        margin: 0 12px 8px 12px;
+        font-size: 0.6em;
+        text-align: right;
+      }
+      .rank-1, .rank-2, .rank-3 {
+        display: inline-block;
+        width: 1.1em;
+        line-height: 1.1em;
+        text-align: center;
+        border-radius: 50%;
+        color: rgba(255, 255, 255, 0.7);
+        margin-right: 2px;
+      }
+      .rank-1 {
+        background-color: #990;
+      }
+      .rank-2 {
+        background-color: #999;
+      }
+      .rank-3 {
+        background-color: #600;
+      }
+      .sub-info {
+        display: inline-block;
+        margin-left: 2px;
+        font-size: 0.6em;
       }
     </style>
   </head>

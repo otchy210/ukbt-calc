@@ -1,6 +1,6 @@
 import { getLocal, setLocal } from './common';
 
-const MAX_LEN = 24;
+const MAX_LEN = 20;
 
 class HistoryManager {
     constructor(type) {
@@ -73,6 +73,13 @@ class HistoryManager {
             r.rank = (i < 3) ? i + 1 : undefined;
             return r;
         }).sort((l, r) => {
+            if (Number.isInteger(l.rank) && Number.isInteger(r.rank)) {
+                return l.rank - r.rank;
+            } else if (Number.isInteger(l.rank)) {
+                return -1;
+            } else if (Number.isInteger(r.rank)) {
+                return 1;
+            }
             return r.ts - l.ts;
         });
         return this._save(anotatedList);

@@ -24,7 +24,7 @@ const formatDate = (ts) => {
 const rankMap = {1: '①', 2: '②', 3: '③'};
 
 const ResultCard = (props) => {
-    const {buffs, result, highlight, showRank, showPin} = props;
+    const {buffs, result, highlight, showRank, onRemove} = props;
     const factor = (buffs.d ? 1.5 : 1.0) + (buffs.m * 3 / 1000);
     const lap = formatNum(result.lap);
     const num = formatNum(result.base * factor);
@@ -37,7 +37,7 @@ const ResultCard = (props) => {
                     [{result.key}] {num} 個/h
                     <span class="sub-info">Lv.{result.lv} - {lap} 秒</span>
                 </h3>
-                {showPin && <h3 class="pin">☆</h3>}
+                {onRemove && <div><a class="remove" onClick={onRemove}>✕</a></div>}
             </div>
             <div class="ts">{ts}</div>
         </div>

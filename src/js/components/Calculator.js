@@ -7,7 +7,7 @@ const Calculator = (props) => {
 
     const [selectedCell, setSelectedCell] = useState('unselected');
     const [lap, setLap] = useState(undefined);
-    const [results, setResults] = useState([]);
+    const [lastResult, setLastResult] = useState();
     const [history, setHistory] = useState([]);
 
     const {values, cells} = data;
@@ -49,13 +49,15 @@ const Calculator = (props) => {
         const turns = (60 * 60 / (lap * 10 + 5 ) ) * 10;
         const base = dropRate * turns;
         const result = {...cell, lap, base, ts: (new Date()).getTime()};
-        const updatedResults = [...results];
-        updatedResults.unshift(result);
-        if (updatedResults.length > 3) {
-            updatedResults.pop();
-        }
-        setResults(updatedResults);
+        setLastResult(result);
         setHistory(historyManager.add(result));
+    };
+    const onRemove = (ts) => {
+        return () => {
+            if (confirm('この結果を削除してよろしいですか？')) {
+                setHistory(historyManager.remove(ts));
+            }
+        };
     };
 
     return <React.Fragment>
@@ -108,18 +110,24 @@ const Calculator = (props) => {
                 <button class="tertiary" onClick={calc} disabled={loading}>予測ドロップ数を計算</button>
             </div>
         </div>
-        {results.length > 0 && <div class="row">
-            {results.map((result, index) => <ResultCard buffs={buffs} result={result} highlight={index === 0} />)}
+        {lastResult && <div class="row">
+            <ResultCard buffs={buffs} result={lastResult} highlight={true} />
         </div>}
     </form>}
     {selectedTab === 'history' && <form>
         <div class="row">
             <div class="col-sm-12 ">
-                24 を超えた履歴は古いものから自動的に削除されます。削除したくないものについてはお気に入りにしておいて下さい。
+                20 を超えた履歴は TOP3 を除いて古いものから自動的に削除されます。
             </div>
         </div>
         <div class="row">
-            {history.map((result) => <ResultCard buffs={buffs} result={result} showRank={true} showPin={true} />)}
+            {history.map((result) => <ResultCard
+                buffs={buffs}
+                result={result}
+                showRank={true}
+                highlight={lastResult && lastResult.ts === result.ts}
+                onRemove={onRemove(result.ts)}
+            />)}
         </div>
     </form>}
     </React.Fragment>

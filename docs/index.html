@@ -36,6 +36,9 @@
       .mode.b {
         background-color: #ccf;
       }
+      .card.result {
+        overflow: visible;
+      }
       .card.result.highlight {
         background-color: #ffc;
       }
@@ -45,8 +48,19 @@
       .card.result > .header > h3:first-child {
         flex-grow: 1;
       }
-      .card.result > .header > h3:last-child {
+      .card.result > .header .remove {
+        display: inline-block;
+        width: 1.2em;
+        line-height: 1.2em;
+        text-align: center;
+        border-radius: 50%;
+        background-color: #900;
+        color: #fff;
         cursor: pointer;
+        border: solid 2px #fff;
+        box-shadow: 0 0 3px rgba(0,0,0,0.7);
+        text-decoration: none;
+        transform: translate(4px, -4px);
       }
       .card.result > .ts {
         margin: 0 12px 8px 12px;

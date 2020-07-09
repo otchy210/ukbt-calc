@@ -51,7 +51,16 @@ const Form = (props) => {
     }, []);
 
     return <>
-    <div class="container">
+    {data.message && <div class="container">
+        <form>
+            <div class="row">
+                <div class="col-sm-12">
+                    {data.message}
+                </div>
+            </div>
+        </form>
+    </div>}
+    {!data.message && <div class="container">
         <form>
             <div class="row">
                 <div class="col-sm-12 col-md-4 input-group fluid">
@@ -87,7 +96,7 @@ const Form = (props) => {
             </div>
         </div>}
         {mode === 'P' && <Post loading={loading} buffs={buffs} data={data} api={api} />}
-    </div>
+    </div>}
     </>
 };
 
